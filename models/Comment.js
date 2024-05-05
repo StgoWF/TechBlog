@@ -1,18 +1,18 @@
 // models/Comment.js
-const { Model, DataTypes } = require('sequelize');
-const sequelize = require('../config/config');
+module.exports = (sequelize, Sequelize) => {
+    const { DataTypes } = Sequelize;
+    class Comment extends Sequelize.Model {}
 
-class Comment extends Model {}
-
-Comment.init({
-  // Define attributes
-  content: {
-    type: DataTypes.TEXT,
-    allowNull: false
-  }
-}, {
-  sequelize,
-  modelName: 'Comment'
-});
-
-module.exports = Comment;
+    Comment.init({
+      content: {
+        type: DataTypes.TEXT,
+        allowNull: false
+      }
+    }, {
+      sequelize, // Asegúrate de pasar la instancia de sequelize aquí
+      modelName: 'Comment',
+      timestamps: false // Especificando directamente aquí para claridad
+    });
+  
+    return Comment;
+};

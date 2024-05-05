@@ -1,12 +1,29 @@
 // models/index.js
-const User = require('./User');
-const Post = require('./Post');
-const Comment = require('./Comment');
+const Sequelize = require('sequelize');
+const config = require('../config/config').development;
 
-User.hasMany(Post);
-Post.belongsTo(User);
+const sequelize = new Sequelize(
+  config.database, 
+  config.username, 
+  config.password, 
+  {
+    host: config.host,
+    dialect: config.dialect,
+    define: {
+      timestamps: false
+    }
+  }
+);
 
-Post.hasMany(Comment);
-Comment.belongsTo(Post);
+const User = require('./User')(sequelize, Sequelize); // Ensure you're passing both sequelize instance and Sequelize class
+const Post = require('./Post')(sequelize, Sequelize);
+const Comment = require('./Comment')(sequelize, Sequelize);
 
-module.exports = { User, Post, Comment };
+// Optional: Define relationships here if needed
+
+module.exports = {
+  sequelize,
+  User,
+  Post,
+  Comment
+};
