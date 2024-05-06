@@ -1,0 +1,32 @@
+/* Estilos básicos para el layout y elementos comunes */
+body {
+    font-family: Arial, sans-serif;
+}
+
+header nav ul {
+    list-style: none;
+    padding: 0;
+    background: darkgreen;
+    color: white;
+    display: flex;
+}
+
+header nav ul li {
+    padding: 10px 20px;
+}
+
+header nav ul li a {
+    color: white;
+    text-decoration: none;
+}
+
+.dashboard, .home, .login-form {
+    margin: 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+}
+
+button {
+    margin-top: 10px;
+    cursor: pointer;
+}
