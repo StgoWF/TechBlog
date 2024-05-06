@@ -3,9 +3,13 @@ const express = require('express');
 const session = require('express-session');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
 const { sequelize } = require('./models'); // Make sure to destructure to get the sequelize instance
+const exphbs = require('express-handlebars');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
+app.set('view engine', 'handlebars');
 
 // Middleware to handle JSON and URL-encoded data
 app.use(express.json());
