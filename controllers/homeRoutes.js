@@ -54,4 +54,17 @@ router.post('/signup', async (req, res) => {
     }
 });
 
+// Route to handle user logout
+router.post('/logout', (req, res) => {
+    if (req.session.logged_in) {
+        // Destroy the session and redirect to login page
+        req.session.destroy(() => {
+            res.status(204).send();  // No Content status to indicate the session was destroyed
+        });
+    } else {
+        // If the user is not logged in, send a bad request response
+        res.status(400).json({ message: 'No session found' });
+    }
+});
+
 module.exports = router;
