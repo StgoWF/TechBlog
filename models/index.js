@@ -1,7 +1,7 @@
-// models/index.js
 const Sequelize = require('sequelize');
 const config = require('../config/config').development;
 
+// Initialize Sequelize with the database configuration
 const sequelize = new Sequelize(
   config.database, 
   config.username, 
@@ -10,17 +10,24 @@ const sequelize = new Sequelize(
     host: config.host,
     dialect: config.dialect,
     define: {
-      timestamps: false
+      timestamps: true  // Enable timestamps for all tables
     }
   }
 );
 
-const User = require('./User')(sequelize, Sequelize); // Ensure you're passing both sequelize instance and Sequelize class
+// Import models
+const User = require('./User')(sequelize, Sequelize);
 const Post = require('./Post')(sequelize, Sequelize);
 const Comment = require('./Comment')(sequelize, Sequelize);
 
-// Optional: Define relationships here if needed
+// Define model relationships
+User.hasMany(Post, { foreignKey: 'userId' }); // A user can have many posts
+Post.belongsTo(User, { foreignKey: 'userId' }); // A post belongs to a user
 
+Post.hasMany(Comment, { foreignKey: 'postId' }); // A post can have many comments
+Comment.belongsTo(Post, { foreignKey: 'postId' }); // A comment belongs to a post
+
+// Export the sequelize instance and all models
 module.exports = {
   sequelize,
   User,
