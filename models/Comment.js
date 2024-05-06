@@ -1,14 +1,13 @@
 // models/Comment.js
-module.exports = (sequelize, Sequelize) => {
-  const { DataTypes } = Sequelize;
-  class Comment extends Sequelize.Model {}
-
-  Comment.init({
+module.exports = (sequelize, DataTypes) => {
+  const { Sequelize } = sequelize;
+  const Comment = sequelize.define('Comment', {
+    // Define the content field for comments
     content: {
       type: DataTypes.TEXT,
-      allowNull: false,
+      allowNull: false, // Ensure content cannot be null
       validate: {
-          notEmpty: true, // This ensures that the comment cannot be an empty string.
+        notEmpty: true, // Ensure content is not empty
       }
     },
     userId: {
@@ -32,6 +31,8 @@ module.exports = (sequelize, Sequelize) => {
     modelName: 'Comment',
     timestamps: true // Automatically adds the createdAt and updatedAt fields
   });
+
+
 
   return Comment;
 };

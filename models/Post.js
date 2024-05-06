@@ -3,7 +3,9 @@ module.exports = (sequelize, Sequelize) => {
   const { DataTypes } = Sequelize;
   class Post extends Sequelize.Model {}
 
+  // Initialize the Post model with sequelize
   Post.init({
+    // Define title field
     title: {
       type: DataTypes.STRING,
       allowNull: false, // Ensures that the title cannot be null
@@ -11,6 +13,7 @@ module.exports = (sequelize, Sequelize) => {
           notEmpty: true, // Prevents empty strings
       }
     },
+    // Define content field
     content: {
       type: DataTypes.TEXT,
       allowNull: false, // Ensures that the content cannot be null
@@ -18,6 +21,7 @@ module.exports = (sequelize, Sequelize) => {
           notEmpty: true, // Prevents empty strings
       }
     },
+    // Define userId field as a foreign key referencing the User model
     userId: {
       type: DataTypes.INTEGER,
       allowNull: false, // Ensures that the userId cannot be null
@@ -31,6 +35,8 @@ module.exports = (sequelize, Sequelize) => {
     modelName: 'Post',
     timestamps: true // Automatically adds the createdAt and updatedAt timestamp fields
   });
+
+
 
   return Post;
 };

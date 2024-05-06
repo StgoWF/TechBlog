@@ -24,10 +24,11 @@ const Comment = require('./Comment')(sequelize, Sequelize);
 
 // Define model relationships
 User.hasMany(Post, { foreignKey: 'userId' }); // A user can have many posts
-Post.belongsTo(User, { foreignKey: 'userId' }); // A post belongs to a user
+Post.belongsTo(User, { as: 'author', foreignKey: 'userId' }); // A post belongs to a user
 
 Post.hasMany(Comment, { foreignKey: 'postId' }); // A post can have many comments
 Comment.belongsTo(Post, { foreignKey: 'postId' }); // A comment belongs to a post
+Comment.belongsTo(User, { as: 'user', foreignKey: 'userId' }); // A comment is made by a user, using an alias
 
 // Export the sequelize instance and all models
 module.exports = {

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Tech Blog</title>
+    <title>Edit Post</title>
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
@@ -19,26 +19,19 @@
                 {{/if}}
             </ul>
         </nav>
-
-
     </header>
 
-    {{{body}}}
+    <div class="container">
+        <h1>Edit Post</h1>
+        <form action="/posts/update/{{post.id}}" method="POST">
+            <input type="text" name="title" value="{{post.title}}" placeholder="Title" required>
+            <textarea name="content" placeholder="Content" required>{{post.content}}</textarea>
+            <button type="submit">Update Post</button>
+        </form>
+    </div>
 
-
-    <script>
-    window.onload = function() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const signupSuccess = urlParams.get('signup');
-        const loginSuccess = urlParams.get('login');
-
-        if (signupSuccess === 'success') {
-            alert('Signup successful!');
-        } else if (loginSuccess === 'success') {
-            alert('Login successful!');
-        }
-    }
-    </script>
-
+    <footer>
+        <p>© 2024 The Tech Blog. All rights reserved.</p>
+    </footer>
 </body>
 </html>
