@@ -11,7 +11,9 @@ const sequelize = new Sequelize(
     dialect: config.dialect,
     define: {
       timestamps: true  // Enable timestamps for all tables
-    }
+      
+    },
+    logging: console.log
   }
 );
 
