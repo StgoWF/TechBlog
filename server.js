@@ -2,11 +2,22 @@ const path = require('path');
 const express = require('express');
 const session = require('express-session');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
-const { sequelize } = require('./models'); // Make sure to destructure to get the sequelize instance
+const Sequelize = require('sequelize');
+const config = require('./config/config'); // Make sure the path is correct
 const { engine } = require('express-handlebars');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// Create Sequelize instance based on the environment
+const env = process.env.NODE_ENV || 'development';
+const sequelizeConfig = config[env];
+let sequelize;
+if (sequelizeConfig.use_env_variable) {
+    sequelize = new Sequelize(process.env[sequelizeConfig.use_env_variable], sequelizeConfig);
+} else {
+    sequelize = new Sequelize(sequelizeConfig.database, sequelizeConfig.username, sequelizeConfig.password, sequelizeConfig);
+}
 
 app.engine('handlebars', engine({ defaultLayout: 'main' }));
 app.set('view engine', 'handlebars');
