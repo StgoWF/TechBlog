@@ -15,28 +15,34 @@ const PORT = process.env.PORT || 3000;
 
 // Initialize Sequelize based on the environment
 let sequelize;
-if (process.env.NODE_ENV === 'production' && process.env.JAWSDB_URL) {
-    console.log("Using JAWSDB_URL for production database connection.");
+if (env === 'production') {
     sequelize = new Sequelize(process.env.JAWSDB_URL, {
         dialect: 'mysql',
         dialectOptions: {
             ssl: {
                 require: true,
-                rejectUnauthorized: false  // Necessary for secure database connections
+                rejectUnauthorized: false
             }
         },
-        logging: true // Enable logging for debugging SQL queries
+        logging: console.log,
+        define: {
+            timestamps: config.define.timestamps
+        }
     });
 } else {
-    console.log("Using local database configuration.");
-    sequelize = new Sequelize(config.development.database, config.development.username, config.development.password, {
-        host: config.development.host,
-        dialect: 'mysql',
-        define: {
-            timestamps: false  // Ensure all tables do not expect default timestamps
-        },
-        logging: true // Enable logging for debugging SQL queries
-    });
+    sequelize = new Sequelize(
+        config.database, 
+        config.username, 
+        config.password, 
+        {
+            host: config.host,
+            dialect: config.dialect,
+            define: {
+                timestamps: config.define.timestamps
+            },
+            logging: console.log
+        }
+    );
 }
 
 // Test the database connection
