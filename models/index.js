@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize');
-const config = require('../config/config').development;
+const env = process.env.NODE_ENV || 'development';
+const config = require('../config/config')[env];
 
 // Initialize Sequelize with the database configuration
 const sequelize = new Sequelize(
@@ -10,7 +11,7 @@ const sequelize = new Sequelize(
     host: config.host,
     dialect: config.dialect,
     define: {
-      timestamps: true  // Enable timestamps for all tables
+      timestamps: config.define.timestamps  // Enable timestamps for all tables
       
     },
     logging: console.log
