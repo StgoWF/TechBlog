@@ -9,7 +9,7 @@ const { engine } = require('express-handlebars');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Create Sequelize instance based on the environment
+// Create a Sequelize instance based on the environment
 const env = process.env.NODE_ENV || 'development';
 const sequelizeConfig = config[env];
 let sequelize;
@@ -56,8 +56,8 @@ app.get('/', (req, res) => {
 app.listen(PORT, async () => {
     console.log(`Server listening on http://localhost:${PORT}`);
     try {
-        await sequelize.sync({ force: true }); // Sync models with DB, create tables if they don't exist
-        console.log('Database tables created!');
+        await sequelize.sync({ force: false }); // Sync models with DB, create tables if they don't exist
+        console.log('Database tables created or updated!');
     } catch (error) {
         console.error('Failed to sync database:', error);
     }
