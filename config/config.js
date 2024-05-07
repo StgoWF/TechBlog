@@ -9,14 +9,14 @@ module.exports = {
     host: process.env.DB_HOST,
     dialect: 'mysql',
     define: {
-      timestamps: false  // Ensure all tables created do not expect default timestamps
+      timestamps: true  // Ensure all tables created do not expect default timestamps
     }
   },
   production: {
     use_env_variable: 'JAWSDB_URL',
     dialect: 'mysql',
     define: {
-      timestamps: false  // Apply the same for production environment
+      timestamps: true  // Apply the same for production environment
     }
   }
 };

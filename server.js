@@ -55,8 +55,7 @@ const sess = {
     store: new SequelizeStore({
         db: sequelize,
         checkExpirationInterval: 15 * 60 * 1000, // The interval at which to cleanup expired sessions
-        expiration: 24 * 60 * 60 * 1000, // The expiration time for sessions
-        disableTouch: true
+        expiration: 24 * 60 * 60 * 1000 // The expiration time for sessions
     }),
     resave: false,
     saveUninitialized: true
