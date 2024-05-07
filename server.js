@@ -31,12 +31,15 @@ if (process.env.NODE_ENV === 'production' && process.env.JAWSDB_URL) {
     console.log("Using local database configuration.");
     sequelize = new Sequelize(config.development.database, config.development.username, config.development.password, {
         host: config.development.host,
-        dialect: config.development.dialect,
+        dialect: 'mysql',
+        define: {
+            timestamps: false  // Ensure all tables do not expect default timestamps
+        },
         logging: true // Enable logging for debugging SQL queries
     });
 }
 
-// Test the connection
+// Test the database connection
 sequelize.authenticate()
     .then(() => console.log('Connection has been established successfully.'))
     .catch(error => console.error('Unable to connect to the database:', error));
@@ -50,7 +53,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Session configuration
 const sess = {
-    secret: process.env.SESSION_SECRET|| 'TechBlog secret', // Ensure this is set in your .env file or environment variables
+    secret: process.env.SESSION_SECRET || 'TechBlog secret', // Ensure this is set in your .env file or hardcoded safely
     cookie: {},
     store: new SequelizeStore({
         db: sequelize,
