@@ -5,45 +5,57 @@ const express = require('express');
 const session = require('express-session');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
 const Sequelize = require('sequelize');
-const config = require('./config/config'); // Make sure the path is correct
-const { engine } = require('express-handlebars');
+const config = require('./config/config'); // Ensure the path to config is correct
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Create a Sequelize instance based on the environment
-const env = process.env.NODE_ENV || 'development';
-const sequelizeConfig = config[env];
+// Initialize Sequelize based on the environment
 let sequelize;
-if (sequelizeConfig.use_env_variable) {
-    sequelize = new Sequelize(process.env[sequelizeConfig.use_env_variable], sequelizeConfig);
-    console.log("Using database config from environment variable:", process.env[sequelizeConfig.use_env_variable]);
+if (process.env.NODE_ENV === 'production' && process.env.JAWSDB_URL) {
+    console.log("Using JAWSDB_URL for production database connection.");
+    sequelize = new Sequelize(process.env.JAWSDB_URL, {
+        dialect: 'mysql',
+        dialectOptions: {
+            ssl: {
+                require: true,
+                rejectUnauthorized: false  // Necessary for secure database connections
+            }
+        },
+        logging: false // Toggle this for debugging SQL queries
+    });
 } else {
-    sequelize = new Sequelize(sequelizeConfig.database, sequelizeConfig.username, sequelizeConfig.password, sequelizeConfig);
+    console.log("Using local database configuration.");
+    sequelize = new Sequelize(config.development.database, config.development.username, config.development.password, {
+        host: config.development.host,
+        dialect: config.development.dialect,
+        define: {
+            timestamps: false // Matches your local settings
+        }
+    });
 }
-console.log("Sequelize configuration used:", sequelizeConfig);
 
+// Test the connection
 sequelize.authenticate()
     .then(() => console.log('Connection has been established successfully.'))
     .catch(error => console.error('Unable to connect to the database:', error));
 
-
 app.engine('handlebars', engine({ defaultLayout: 'main' }));
 app.set('view engine', 'handlebars');
 
-// Middleware to handle JSON and URL-encoded data
+// Middleware for handling JSON and URL-encoded data
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Session configuration
 const sess = {
-  secret: 'TechBlog secret',
-  cookie: {},
-  store: new SequelizeStore({
-    db: sequelize,
-  }),
-  resave: false,
-  saveUninitialized: true,
+    secret: 'TechBlog secret',
+    cookie: {},
+    store: new SequelizeStore({
+        db: sequelize,
+    }),
+    resave: false,
+    saveUninitialized: true,
 };
 app.use(session(sess));
 
