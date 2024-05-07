@@ -15,37 +15,28 @@ const PORT = process.env.PORT || 3000;
 
 // Initialize Sequelize based on the environment
 let sequelize;
-if (env === 'production') {
+if (process.env.NODE_ENV === 'production' && process.env.JAWSDB_URL) {
+    console.log("Using JAWSDB_URL for production database connection.");
     sequelize = new Sequelize(process.env.JAWSDB_URL, {
         dialect: 'mysql',
         dialectOptions: {
             ssl: {
                 require: true,
-                rejectUnauthorized: false
+                rejectUnauthorized: false  // Necessary for secure database connections
             }
         },
-        logging: console.log,
-        define: {
-            timestamps: config.define.timestamps
-        }
+        logging: true // Enable logging for debugging SQL queries
     });
 } else {
-    sequelize = new Sequelize(
-        config.database, 
-        config.username, 
-        config.password, 
-        {
-            host: config.host,
-            dialect: config.dialect,
-            define: {
-                timestamps: config.define.timestamps
-            },
-            logging: console.log
-        }
-    );
+    console.log("Using local database configuration.");
+    sequelize = new Sequelize(config.development.database, config.development.username, config.development.password, {
+        host: config.development.host,
+        dialect: config.development.dialect,
+        logging: true // Enable logging for debugging SQL queries
+    });
 }
 
-// Test the database connection
+// Test the connection
 sequelize.authenticate()
     .then(() => console.log('Connection has been established successfully.'))
     .catch(error => console.error('Unable to connect to the database:', error));
@@ -59,7 +50,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Session configuration
 const sess = {
-    secret: process.env.SESSION_SECRET || 'TechBlog secret', // Ensure this is set in your .env file or hardcoded safely
+    secret: process.env.SESSION_SECRET|| 'TechBlog secret', // Ensure this is set in your .env file or environment variables
     cookie: {},
     store: new SequelizeStore({
         db: sequelize,
