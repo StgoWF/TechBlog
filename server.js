@@ -50,7 +50,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Session configuration
 const sess = {
-    secret: process.env.SESSION_SECRET, // Ensure this is set in your .env file or environment variables
+    secret: process.env.SESSION_SECRET|| 'TechBlog secret', // Ensure this is set in your .env file or environment variables
     cookie: {},
     store: new SequelizeStore({
         db: sequelize,
