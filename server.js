@@ -1,4 +1,3 @@
-// server.js
 console.log("Environment:", process.env.NODE_ENV);
 
 const path = require('path');
@@ -7,37 +6,38 @@ const { engine } = require('express-handlebars');
 const session = require('express-session');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
 const Sequelize = require('sequelize');
-const config = require('./config/config'); // Ensure the path to config is correct
+const config = require('./config/config'); // Asegúrate de que la ruta del archivo de configuración es correcta
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Initialize Sequelize based on the environment
+// Inicializa Sequelize basado en el entorno
 let sequelize;
 if (process.env.NODE_ENV === 'production' && process.env.JAWSDB_URL) {
-    console.log("Using JAWSDB_URL for production database connection.");
+    console.log("Using JAWSDB_URL for production database connection:", process.env.JAWSDB_URL);
     sequelize = new Sequelize(process.env.JAWSDB_URL, {
         dialect: 'mysql',
         dialectOptions: {
             ssl: {
                 require: true,
-                rejectUnauthorized: false  // Necessary for secure database connections
+                rejectUnauthorized: false  // Necesario para conexiones seguras a la base de datos
             }
         },
-        logging: false // Toggle this for debugging SQL queries
+        logging: console.log // Activa esto para depurar consultas SQL
     });
 } else {
-    console.log("Using local database configuration.");
+    console.log("Using local database configuration:", config.development);
     sequelize = new Sequelize(config.development.database, config.development.username, config.development.password, {
         host: config.development.host,
         dialect: config.development.dialect,
         define: {
-            timestamps: false // Matches your local settings
-        }
+            timestamps: false // Asegúrate de que esto coincide con tus configuraciones locales
+        },
+        logging: console.log
     });
 }
 
-// Test the connection
+// Prueba la conexión
 sequelize.authenticate()
     .then(() => console.log('Connection has been established successfully.'))
     .catch(error => console.error('Unable to connect to the database:', error));
@@ -45,11 +45,11 @@ sequelize.authenticate()
 app.engine('handlebars', engine({ defaultLayout: 'main' }));
 app.set('view engine', 'handlebars');
 
-// Middleware for handling JSON and URL-encoded data
+// Middleware para manejar datos JSON y codificados por URL
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Session configuration
+// Configuración de la sesión
 const sess = {
     secret: 'TechBlog secret',
     cookie: {},
@@ -60,26 +60,27 @@ const sess = {
     saveUninitialized: true,
 };
 app.use(session(sess));
+console.log('Session middleware configured.');
 
-// Import routes
+// Importa rutas
 const homeRoutes = require('./controllers/homeRoutes');
 
-// Middleware to serve static files
+// Middleware para servir archivos estáticos
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Use defined routes
+// Utiliza rutas definidas
 app.use(homeRoutes);
 
-// Route for the home page
+// Ruta para la página principal
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Start the server
+// Inicia el servidor
 app.listen(PORT, async () => {
     console.log(`Server listening on http://localhost:${PORT}`);
     try {
-        await sequelize.sync({ force: false }); // Sync models with DB, create tables if they don't exist
+        await sequelize.sync({ force: false }); // Sincroniza los modelos con la DB, crea tablas si no existen
         console.log('Database tables created or updated!');
     } catch (error) {
         console.error('Failed to sync database:', error);
