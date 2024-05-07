@@ -2,6 +2,7 @@ console.log("Environment:", process.env.NODE_ENV);
 
 const path = require('path');
 const express = require('express');
+const { engine } = require('express-handlebars');
 const session = require('express-session');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
 const Sequelize = require('sequelize');
