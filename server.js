@@ -15,9 +15,16 @@ const sequelizeConfig = config[env];
 let sequelize;
 if (sequelizeConfig.use_env_variable) {
     sequelize = new Sequelize(process.env[sequelizeConfig.use_env_variable], sequelizeConfig);
+    console.log("Using database config from environment variable:", process.env[sequelizeConfig.use_env_variable]);
 } else {
     sequelize = new Sequelize(sequelizeConfig.database, sequelizeConfig.username, sequelizeConfig.password, sequelizeConfig);
 }
+console.log("Sequelize configuration used:", sequelizeConfig);
+
+sequelize.authenticate()
+    .then(() => console.log('Connection has been established successfully.'))
+    .catch(error => console.error('Unable to connect to the database:', error));
+
 
 app.engine('handlebars', engine({ defaultLayout: 'main' }));
 app.set('view engine', 'handlebars');
