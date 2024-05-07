@@ -1,6 +1,5 @@
 // Server.js
 console.log('Starting server...');
-
 console.log("Environment:", process.env.NODE_ENV);
 
 const path = require('path');
@@ -26,16 +25,14 @@ if (process.env.NODE_ENV === 'production' && process.env.JAWSDB_URL) {
                 rejectUnauthorized: false  // Necessary for secure database connections
             }
         },
-        logging: false // Toggle this for debugging SQL queries
+        logging: true // Enable logging for debugging SQL queries
     });
 } else {
     console.log("Using local database configuration.");
     sequelize = new Sequelize(config.development.database, config.development.username, config.development.password, {
         host: config.development.host,
         dialect: config.development.dialect,
-        define: {
-            timestamps: false // Matches your local settings
-        }
+        logging: true // Enable logging for debugging SQL queries
     });
 }
 
@@ -44,16 +41,6 @@ sequelize.authenticate()
     .then(() => console.log('Connection has been established successfully.'))
     .catch(error => console.error('Unable to connect to the database:', error));
 
-// Additional code to test the database connection
-(async () => {
-    try {
-        // This will throw an error if the connection fails
-        await sequelize.authenticate();
-        console.log('Connection to the database has been established successfully.');
-    } catch (error) {
-        console.error('Unable to connect to the database:', error);
-    }
-})();
 app.engine('handlebars', engine({ defaultLayout: 'main' }));
 app.set('view engine', 'handlebars');
 
@@ -63,15 +50,15 @@ app.use(express.urlencoded({ extended: true }));
 
 // Session configuration
 const sess = {
-  secret: process.env.SESSION_SECRET,
-  cookie: {},
-  store: new SequelizeStore({
-      db: sequelize,
-      checkExpirationInterval: 15 * 60 * 1000,
-      expiration: 24 * 60 * 60 * 1000
-  }),
-  resave: false,
-  saveUninitialized: true
+    secret: process.env.SESSION_SECRET, // Ensure this is set in your .env file or environment variables
+    cookie: {},
+    store: new SequelizeStore({
+        db: sequelize,
+        checkExpirationInterval: 15 * 60 * 1000, // The interval at which to cleanup expired sessions
+        expiration: 24 * 60 * 60 * 1000 // The expiration time for sessions
+    }),
+    resave: false,
+    saveUninitialized: true
 };
 
 // Error handling for SequelizeStore setup
@@ -79,7 +66,7 @@ sess.store.sync().catch(err => {
     console.error('Error setting up session store:', err);
 });
 app.use(session(sess));
-
+console.log('Session middleware configured.');
 
 // Import routes
 const homeRoutes = require('./controllers/homeRoutes');
@@ -92,6 +79,7 @@ app.use(homeRoutes);
 
 // Route for the home page
 app.get('/', (req, res) => {
+    console.log('Handling GET request for the home page');
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
