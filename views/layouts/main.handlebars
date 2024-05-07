@@ -27,19 +27,28 @@
     {{{body}}}
 
 
-    <script>
-    window.onload = function() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const signupSuccess = urlParams.get('signup');
-        const loginSuccess = urlParams.get('login');
+<script>
+window.onload = function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const signupSuccess = urlParams.get('signup');
+    const loginSuccess = urlParams.get('login');
+    const signupError = urlParams.get('signupError');
+    const loginError = urlParams.get('loginError');
 
-        if (signupSuccess === 'success') {
-            alert('Signup successful!');
-        } else if (loginSuccess === 'success') {
-            alert('Login successful!');
-        }
+    if (signupSuccess === 'success') {
+        alert('Signup successful!');
+    } else if (signupError) {
+        alert('Signup failed: ' + signupError);
     }
-    </script>
+
+    if (loginSuccess === 'success') {
+        alert('Login successful!');
+    } else if (loginError) {
+        alert('Login failed: ' + loginError);
+    }
+}
+</script>
+
 
 </body>
 </html>

@@ -73,12 +73,12 @@ router.post('/signup', async (req, res) => {
             req.session.user_id = newUser.id;
             req.session.logged_in = true;
 
-            // Redirect the user to the login page with a query parameter
+            // Redirect the user to the login page with a success query parameter
             res.redirect('/login?signup=success');
         });
     } catch (err) {
-        // Send the user back to the signup form with an error message
-        res.status(400).render('signup', { error: err.message });
+        // Redirect back to the signup page with an error message
+        res.redirect(`/signup?signupError=${encodeURIComponent(err.message)}`);
     }
 });
 
@@ -95,13 +95,15 @@ router.post('/login', async (req, res) => {
     try {
         const userData = await User.findOne({ where: { username: req.body.username } });
         if (!userData) {
-            res.status(400).render('login', { error: 'Incorrect username or password.' });
+            // Redirect with an error query parameter if the user is not found
+            res.redirect('/login?loginError=Incorrect username or password.');
             return;
         }
 
         const validPassword = await userData.checkPassword(req.body.password);
         if (!validPassword) {
-            res.status(400).render('login', { error: 'Incorrect username or password.' });
+            // Redirect with an error query parameter if the password is incorrect
+            res.redirect('/login?loginError=Incorrect username or password.');
             return;
         }
 
@@ -109,39 +111,14 @@ router.post('/login', async (req, res) => {
             req.session.user_id = userData.id;
             req.session.logged_in = true;
 
-            // Redirect the user to the main page with a query parameter
-            res.redirect('/?login=success');
+            // Redirect the user to the main page with a success query parameter
+            res.redirect('/dashboard?login=success');
         });
     } catch (err) {
-        res.status(500).render('login', { error: err.message });
+        res.status(500).redirect(`/login?loginError=${encodeURIComponent(err.message)}`);
     }
 });
 
-// This is a POST route for login that handles authentication
-router.post('/login', async (req, res) => {
-    try {
-        const { username, password } = req.body;
-        // Try to find the user by username
-        const user = await User.findOne({ where: { username } });
-        if (!user) {
-            // If the user is not found
-            res.render('login', { message: 'User not found' });
-        } else {
-            // Compare the password with the hashed password in the database
-            const isValid = await bcrypt.compare(password, user.password);
-            if (!isValid) {
-                res.render('login', { message: 'Invalid password' });
-            } else {
-                // Handle session or cookie creation here
-                req.session.user = user;
-                res.redirect('/dashboard');
-            }
-        }
-    } catch (error) {
-        console.error('Login error:', error);
-        res.status(500).render('login', { message: 'Login error' });
-    }
-});
 
 
 
