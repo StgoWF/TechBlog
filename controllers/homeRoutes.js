@@ -117,6 +117,33 @@ router.post('/login', async (req, res) => {
     }
 });
 
+// This is a POST route for login that handles authentication
+router.post('/login', async (req, res) => {
+    try {
+        const { username, password } = req.body;
+        // Try to find the user by username
+        const user = await User.findOne({ where: { username } });
+        if (!user) {
+            // If the user is not found
+            res.render('login', { message: 'User not found' });
+        } else {
+            // Compare the password with the hashed password in the database
+            const isValid = await bcrypt.compare(password, user.password);
+            if (!isValid) {
+                res.render('login', { message: 'Invalid password' });
+            } else {
+                // Handle session or cookie creation here
+                req.session.user = user;
+                res.redirect('/dashboard');
+            }
+        }
+    } catch (error) {
+        console.error('Login error:', error);
+        res.status(500).render('login', { message: 'Login error' });
+    }
+});
+
+
 
 // GET route for user logout
 router.get('/logout', (req, res) => {

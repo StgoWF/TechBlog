@@ -1,23 +1,28 @@
-<h2>{{post.title}}</h2>
-<p>{{post.content}}</p>
-
-{{!-- Ensure that comments are being loaded correctly --}}
-{{#if post.Comments}}
-    <h3>Comments</h3>
-    {{#each post.Comments}}
-    <div class="comment">
-        <p>{{this.content}}</p>
-        {{!-- Verify that the user model is being included and referenced correctly --}}
-        <p>Comment by: {{this.user.username}}</p>
+<div class="post">
+    <div class="post-content">
+        <h2 class="post-title">{{post.title}}</h2>
+        <p>{{post.content}}</p>
     </div>
-    {{/each}}
-{{else}}
-    <p>No comments yet. Be the first to comment!</p>
-{{/if}}
 
-{{!-- Form to add a comment --}}
-<h3>Add a Comment</h3>
-<form action="/posts/comment/{{post.id}}" method="POST">
-    <textarea name="content" required placeholder="Add a comment..."></textarea>
-    <button type="submit">Submit</button>
-</form>
+    {{#if post.Comments}}
+        <div class="comments-section">
+            <h3 class="comments-title">Comments</h3>
+            {{#each post.Comments}}
+                <div class="comment">
+                    <p>{{this.content}}</p>
+                    <small class="comment-author">Comment by: {{this.user.username}}</small>
+                </div>
+            {{/each}}
+        </div>
+    {{else}}
+        <p class="no-comments">No comments yet. Be the first to comment!</p>
+    {{/if}}
+
+    <div class="add-comment-section">
+        <h3 class="add-comment-title">Add a Comment</h3>
+        <form action="/posts/comment/{{post.id}}" method="POST" class="comment-form">
+            <textarea name="content" required placeholder="Add a comment..." class="comment-textarea"></textarea>
+            <button type="submit" class="comment-submit">Submit</button>
+        </form>
+    </div>
+</div>
