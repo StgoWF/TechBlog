@@ -1,4 +1,4 @@
-server.js
+// server.js
 console.log("Environment:", process.env.NODE_ENV);
 
 const path = require('path');
