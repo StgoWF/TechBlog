@@ -1,7 +1,6 @@
-// Server.js
-// Server.js
 console.log('Starting server...');
 console.log("Environment:", process.env.NODE_ENV);
+console.log("JAWSDB_URL from environment:", process.env.JAWSDB_URL);
 
 const path = require('path');
 const express = require('express');
@@ -14,21 +13,24 @@ const config = require('./config/config');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-console.log("JAWSDB_URL:", process.env.JAWSDB_URL);
-
 let sequelize;
-if (process.env.NODE_ENV === 'production' && process.env.JAWSDB_URL) {
-    console.log("Using JAWSDB_URL for production database connection.");
-    sequelize = new Sequelize(process.env.JAWSDB_URL, {
-        dialect: 'mysql',
-        dialectOptions: {
-            ssl: {
-                require: true,
-                rejectUnauthorized: false
-            }
-        },
-        logging: console.log
-    });
+if (process.env.NODE_ENV === 'production') {
+    console.log("Production environment detected.");
+    if (process.env.JAWSDB_URL) {
+        console.log("Using JAWSDB_URL for production database connection.");
+        sequelize = new Sequelize(process.env.JAWSDB_URL, {
+            dialect: 'mysql',
+            dialectOptions: {
+                ssl: {
+                    require: true,
+                    rejectUnauthorized: false
+                }
+            },
+            logging: console.log
+        });
+    } else {
+        console.error("No JAWSDB_URL found. Check your Heroku configuration.");
+    }
 } else {
     console.log("Using local database configuration:", config.development);
     sequelize = new Sequelize(
