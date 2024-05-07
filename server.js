@@ -1,3 +1,4 @@
+// Server.js
 console.log('Starting server...');
 
 console.log("Environment:", process.env.NODE_ENV);
@@ -52,16 +53,21 @@ app.use(express.urlencoded({ extended: true }));
 
 // Session configuration
 const sess = {
-  secret: process.env.SESSION_SECRET, // Usa la variable de entorno
+  secret: process.env.SESSION_SECRET,
   cookie: {},
   store: new SequelizeStore({
       db: sequelize,
+      checkExpirationInterval: 15 * 60 * 1000,
+      expiration: 24 * 60 * 60 * 1000
   }),
   resave: false,
-  saveUninitialized: true,
-  checkExpirationInterval: 15 * 60 * 1000, // Intervalo para limpiar sesiones expiradas
-  expiration: 24 * 60 * 60 * 1000  // Máxima duración de la sesión
+  saveUninitialized: true
 };
+
+// Error handling for SequelizeStore setup
+sess.store.sync().catch(err => {
+    console.error('Error setting up session store:', err);
+});
 app.use(session(sess));
 
 
