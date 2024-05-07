@@ -18,6 +18,17 @@ const sequelize = new Sequelize(
   }
 );
 
+
+// Function to log database connection status
+function logDatabaseConnectionStatus() {
+  sequelize.authenticate()
+    .then(() => console.log('Connection has been established successfully.'))
+    .catch(error => console.error('Unable to connect to the database:', error));
+}
+
+// Log the database connection status
+logDatabaseConnectionStatus();
+
 // Import models
 const User = require('./User')(sequelize, Sequelize);
 const Post = require('./Post')(sequelize, Sequelize);

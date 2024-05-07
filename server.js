@@ -1,3 +1,5 @@
+console.log('Starting server...');
+
 console.log("Environment:", process.env.NODE_ENV);
 
 const path = require('path');
@@ -50,15 +52,18 @@ app.use(express.urlencoded({ extended: true }));
 
 // Session configuration
 const sess = {
-    secret: 'TechBlog secret',
-    cookie: {},
-    store: new SequelizeStore({
-        db: sequelize,
-    }),
-    resave: false,
-    saveUninitialized: true,
+  secret: process.env.SESSION_SECRET, // Usa la variable de entorno
+  cookie: {},
+  store: new SequelizeStore({
+      db: sequelize,
+  }),
+  resave: false,
+  saveUninitialized: true,
+  checkExpirationInterval: 15 * 60 * 1000, // Intervalo para limpiar sesiones expiradas
+  expiration: 24 * 60 * 60 * 1000  // Máxima duración de la sesión
 };
 app.use(session(sess));
+
 
 // Import routes
 const homeRoutes = require('./controllers/homeRoutes');
