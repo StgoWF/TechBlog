@@ -5,6 +5,7 @@ module.exports = {
   production: {
     use_env_variable: 'JAWSDB_URL',
     dialect: 'mysql',
+    "migrationStorageTableName": "migrations",
     define: {
       timestamps: false  // Aplique lo mismo para el entorno de producción
     },
