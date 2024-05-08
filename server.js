@@ -12,7 +12,9 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 let sequelize;
-if (process.env.NODE_ENV === 'production') {
+// Determina si el entorno es de producción y si la variable JAWSDB_URL está disponible
+if (process.env.NODE_ENV === 'production' && process.env.JAWSDB_URL) {
+    console.log("Using JAWSDB_URL for production database connection:", process.env.JAWSDB_URL);
     sequelize = new Sequelize(process.env.JAWSDB_URL, {
         dialect: 'mysql',
         dialectOptions: {
@@ -23,10 +25,18 @@ if (process.env.NODE_ENV === 'production') {
         }
     });
 } else {
-    sequelize = new Sequelize(config.development.database, config.development.username, config.development.password, {
-        host: config.development.host,
-        dialect: config.development.dialect
-    });
+    console.log("Using local database configuration.");
+    // Asegúrate de que 'development' está bien configurado en config.js
+    const localConfig = config.development;
+    sequelize = new Sequelize(
+        localConfig.database,
+        localConfig.username,
+        localConfig.password,
+        {
+            host: localConfig.host,
+            dialect: localConfig.dialect
+        }
+    );
 }
 
 
