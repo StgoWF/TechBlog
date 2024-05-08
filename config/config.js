@@ -1,28 +1,19 @@
-require('dotenv').config();
+// config/config.js
+require('dotenv').config();  // Asegura que se puedan usar variables de entorno
 
 module.exports = {
-  development: {
-    username: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    host: process.env.DB_HOST,
-    dialect: 'mysql',
-    define: {
-      timestamps: false
-    }
-  },
   production: {
     use_env_variable: 'JAWSDB_URL',
     dialect: 'mysql',
     define: {
-      timestamps: false
+      timestamps: false  // Aplique lo mismo para el entorno de producción
     },
     dialectOptions: {
       ssl: {
         require: true,
-        rejectUnauthorized: false
+        rejectUnauthorized: false  // Necesario para conexiones de base de datos seguras
       }
     },
-    logging: false
+    logging: false  // Desactiva el registro de consultas SQL para limpiar la salida de la consola
   }
 };
