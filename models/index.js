@@ -1,48 +1,62 @@
 const Sequelize = require('sequelize');
+const config = require('../config/config');
+
+// Determinar el entorno y cargar la configuración adecuada
 const env = process.env.NODE_ENV || 'development';
+const dbConfig = config[env];
 console.log('Current environment:', env);  // Log the current environment
+console.log('Database configuration loaded:', dbConfig);  // Log the loaded database configuration
 
-const config = require('../config/config')[env];
-console.log('Database configuration loaded:', config);  // Log the loaded database configuration
+let sequelize;
 
-// Check if all required config properties are present
-if (!config.database || !config.username || !config.password || !config.host || !config.dialect) {
-    console.error('Database configuration is incomplete');
+// Inicialización de Sequelize basada en el entorno
+if (dbConfig.use_env_variable) {
+    // Uso de la variable de entorno en producción para la URL de la base de datos
+    sequelize = new Sequelize(process.env[dbConfig.use_env_variable], {
+        dialect: 'mysql',
+        dialectOptions: {
+            ssl: {
+                require: true,
+                rejectUnauthorized: false
+            }
+        },
+        logging: false // Cambiar a true para ver los logs de SQL en el entorno de desarrollo
+    });
+} else {
+    // Configuración detallada para el desarrollo
+    sequelize = new Sequelize(
+        dbConfig.database, 
+        dbConfig.username, 
+        dbConfig.password, 
+        {
+            host: dbConfig.host,
+            dialect: dbConfig.dialect,
+            define: {
+                timestamps: dbConfig.define.timestamps
+            },
+            logging: console.log
+        }
+    );
 }
 
-// Initialize Sequelize with the database configuration
-const sequelize = new Sequelize(
-  config.database, 
-  config.username, 
-  config.password, 
-  {
-    host: config.host,
-    dialect: config.dialect,
-    define: {
-      timestamps: config.define ? config.define.timestamps : false
-    },
-    logging: console.log  // Logs all SQL queries to the console
-  }
-);
-
-// Function to log database connection status
+// Función para registrar el estado de la conexión a la base de datos
 function logDatabaseConnectionStatus() {
-  sequelize.authenticate()
-    .then(() => console.log('Connection has been established successfully.'))
-    .catch(error => console.error('Unable to connect to the database:', error));
+    sequelize.authenticate()
+        .then(() => console.log('Connection has been established successfully.'))
+        .catch(error => console.error('Unable to connect to the database:', error));
 }
 
-// Log the database connection status
+// Registrar el estado de la conexión
 logDatabaseConnectionStatus();
 
-// Import models
+// Importar modelos
 const User = require('./User')(sequelize, Sequelize);
 const Post = require('./Post')(sequelize, Sequelize);
 const Comment = require('./Comment')(sequelize, Sequelize);
 
 console.log('Models imported successfully');  // Log successful model importation
 
-// Define model relationships
+// Definir relaciones entre modelos
 User.hasMany(Post, { foreignKey: 'userId' });
 Post.belongsTo(User, { as: 'author', foreignKey: 'userId' });
 Post.hasMany(Comment, { foreignKey: 'postId' });
@@ -51,7 +65,7 @@ Comment.belongsTo(User, { as: 'user', foreignKey: 'userId' });
 
 console.log('Model relationships defined successfully');  // Log successful relationship definition
 
-// Export the sequelize instance and all models
+// Exportar la instancia de Sequelize y todos los modelos
 module.exports = {
   sequelize,
   User,
