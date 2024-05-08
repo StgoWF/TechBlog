@@ -10,8 +10,7 @@ module.exports = {
     dialect: 'mysql',
     define: {
       timestamps: false  // Asegúrate de que todas las tablas creadas no esperen marcas de tiempo predeterminadas
-    },
-    migrationStorageTableName: "sequelize_migrations"  // Nombre de la tabla para gestionar las migraciones
+    }
   },
   production: {
     use_env_variable: 'JAWSDB_URL',
