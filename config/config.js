@@ -1,5 +1,4 @@
-// config/config.js
-require('dotenv').config();  // Ensures we can use environment variables
+require('dotenv').config();
 
 module.exports = {
   development: {
@@ -9,14 +8,21 @@ module.exports = {
     host: process.env.DB_HOST,
     dialect: 'mysql',
     define: {
-      timestamps: false  // Ensure all tables created do not expect default timestamps
+      timestamps: false
     }
   },
   production: {
     use_env_variable: 'JAWSDB_URL',
     dialect: 'mysql',
     define: {
-      timestamps: false  // Apply the same for production environment
-    }
+      timestamps: false
+    },
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false
+      }
+    },
+    logging: false
   }
 };
