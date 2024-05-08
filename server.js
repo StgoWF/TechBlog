@@ -11,27 +11,26 @@ const config = require('./config/config'); // Asegúrate de que la ruta del arch
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Inicializa Sequelize basado en el entorno
 let sequelize;
-if (process.env.NODE_ENV === 'production' && process.env.JAWSDB_URL) {
-    console.log("Using JAWSDB_URL for production database connection:", process.env.JAWSDB_URL);
+if (process.env.JAWSDB_URL) {
+    console.log("Using JAWSDB_URL for database connection:", process.env.JAWSDB_URL);
     sequelize = new Sequelize(process.env.JAWSDB_URL, {
         dialect: 'mysql',
         dialectOptions: {
             ssl: {
                 require: true,
-                rejectUnauthorized: false  // Necesario para conexiones seguras a la base de datos
+                rejectUnauthorized: false
             }
         },
-        logging: console.log // Activa esto para depurar consultas SQL
+        logging: console.log
     });
 } else {
-    console.log("Using local database configuration:", config.development);
+    console.log("Falling back to local database configuration:", config.development);
     sequelize = new Sequelize(config.development.database, config.development.username, config.development.password, {
         host: config.development.host,
         dialect: config.development.dialect,
         define: {
-            timestamps: false // Asegúrate de que esto coincide con tus configuraciones locales
+            timestamps: false
         },
         logging: console.log
     });
