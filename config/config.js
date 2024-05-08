@@ -2,12 +2,23 @@
 require('dotenv').config();  // Asegura que se puedan usar variables de entorno
 
 module.exports = {
+  development: {
+    username: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    host: process.env.DB_HOST,
+    dialect: 'mysql',
+    define: {
+      timestamps: false  // Asegúrate de que todas las tablas creadas no esperen marcas de tiempo predeterminadas
+    },
+    migrationStorageTableName: "sequelize_migrations"  // Nombre de la tabla para gestionar las migraciones
+  },
   production: {
     use_env_variable: 'JAWSDB_URL',
     dialect: 'mysql',
-    "migrationStorageTableName": "migrations",
+    migrationStorageTableName: "sequelize_migrations",
     define: {
-      timestamps: false  // Aplique lo mismo para el entorno de producción
+      timestamps: false  // Aplica lo mismo para el entorno de producción
     },
     dialectOptions: {
       ssl: {
