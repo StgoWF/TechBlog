@@ -15,7 +15,7 @@ const { engine } = require('express-handlebars');
 const session = require('express-session');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
 const Sequelize = require('sequelize');
-const config = require('./config/config'); // Ensure the path to config is correct
+const config = require('./config/config'); 
 
 const app = express();
 const PORT = process.env.PORT || 4000;

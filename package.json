@@ -13,7 +13,13 @@
     "node": ">=14.0.0",
     "npm": ">=6.0.0"
   },
-  "keywords": ["techblog", "blog", "node", "express", "sequelize"],
+  "keywords": [
+    "techblog",
+    "blog",
+    "node",
+    "express",
+    "sequelize"
+  ],
   "author": "Your Name",
   "license": "ISC",
   "dependencies": {
@@ -23,6 +29,7 @@
     "express": "^4.19.2",
     "express-handlebars": "^7.1.2",
     "express-session": "^1.18.0",
+    "method-override": "^3.0.0",
     "mysql2": "^3.9.7",
     "sequelize": "^6.37.3"
   },
