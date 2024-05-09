@@ -1,6 +1,9 @@
 // config/config.js
-require('dotenv').config();  // Asegura que se puedan usar variables de entorno
+require('dotenv').config(); 
+console.log('Starting server...');
 
+
+console.log("Environment:", process.env.NODE_ENV);
 module.exports = {
   development: {
     username: process.env.DB_USER,
@@ -9,7 +12,7 @@ module.exports = {
     host: process.env.DB_HOST,
     dialect: 'mysql',
     define: {
-      timestamps: false  // Asegúrate de que todas las tablas creadas no esperen marcas de tiempo predeterminadas
+      timestamps: true  // Asegúrate de que todas las tablas creadas no esperen marcas de tiempo predeterminadas
     }
   },
   production: {
@@ -17,7 +20,7 @@ module.exports = {
     dialect: 'mysql',
     migrationStorageTableName: "sequelize_migrations",
     define: {
-      timestamps: false  // Aplica lo mismo para el entorno de producción
+      timestamps: true  // Aplica lo mismo para el entorno de producción
     },
     dialectOptions: {
       ssl: {
