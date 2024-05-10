@@ -1,28 +1,56 @@
+{{!-- Dashboard Handlebar --}}
 <h1>Your Dashboard</h1>
 
-
-
+{{!-- Check if there are any posts to display --}}
 {{#if posts.length}}
+    {{!-- Iterate through each post --}}
     {{#each posts}}
-        <div class="post">
-            <h2>{{this.title}}</h2>
-            <p>{{this.content}}</p>
-            <a href="/posts/{{this.id}}" class="btn">Read More & Comment</a>
-            <!-- Options to edit and delete own posts -->
-            <a href="/posts/edit/{{this.id}}" class="btn">Edit</a>
-            <form action="/posts/delete/{{this.id}}" method="POST" style="display: none;" id="delete-post-{{this.id}}">
-                <input type="hidden">
-            </form>
-            <a href="#" class="btn" onclick="document.getElementById('delete-post-{{this.id}}').submit();">Delete</a>
-
+        <div class="post-dashboard">
+            {{!-- Link to view the detailed post page using the post title --}}
+            <h2><a href="/posts/{{this.id}}" class="post-title-link">{{this.title}}</a></h2>
+            {{!-- Control buttons for editing and deleting posts --}}
+            <div class="post-controls">
+                <a href="/posts/edit/{{this.id}}" class="btn">Edit</a>
+                <a href="javascript:void(0);" onclick="deletePost('{{this.id}}');" class="btn btn-action">Delete</a>
+            </div>
         </div>
-
     {{/each}}
-        <!-- Button to add new posts, always visible at the top of the dashboard page -->
-        <div class="dashboard-controls">
-            <a href="/posts/new" class="btn-add-post">+ New Post</a>
-        </div>  
+    {{!-- Button to add new posts, always visible at the top of the dashboard --}}
+    <div class="dashboard-controls">
+        <a href="/posts/new" class="btn-add-post">+ New Post</a>
+    </div>
 {{else}}
-    <!-- Message for when there are no posts and direct link to create a new post -->
+    {{!-- Message displayed when there are no posts --}}
     <p>No posts yet. <a href="/posts/new" class="btn-add-post">Create one</a>!</p>
 {{/if}}
+
+<script>
+// Function to delete a post
+function deletePost(postId) {
+    // Confirm with the user before deleting the post
+    if (confirm('Are you sure you want to delete this post?')) {
+        // Make a POST request to delete the post
+        fetch(`/posts/delete/${postId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            }
+        })
+        .then(response => {
+            // Check if the deletion was successful
+            if (response.ok) {
+                // Reload the page to reflect that the post has been deleted
+                window.location.reload();
+            } else {
+                // Alert the user if the deletion failed
+                alert('Failed to delete the post.');
+            }
+        })
+        .catch(error => {
+            // Log and alert any errors if the fetch operation fails
+            console.error('Error deleting post:', error);
+            alert('Error deleting post.');
+        });
+    }
+}
+</script>

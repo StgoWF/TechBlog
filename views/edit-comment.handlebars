@@ -1,0 +1,10 @@
+<div class="login-form">
+    <h2>Edit Comment for Post: {{post.title}}</h2>
+    <h3>Current Comment: "{{comment.content}}"</h3>
+    <form action="/comments/update/{{comment.id}}" method="POST">
+        <!-- Include hidden input to keep track of the post ID -->
+        <input type="hidden" name="postId" value="{{post.id}}">
+        <textarea name="content" required placeholder="Update your comment here..." class="form-textarea"></textarea>
+        <button type="submit" class="comment-submit">Update Comment</button>
+    </form>
+</div>

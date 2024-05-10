@@ -60,15 +60,20 @@ header nav ul li a {
 } */
 
 button {
-    margin-top: 10px;
+    background-color: #23100f;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
     cursor: pointer;
-    /* display: grid; */
-    width: 80%;
-    /* justify-content: center; */
+    justify-content: center;
     display: grid;
-    margin-left: 154px;
-    margin-top: 12px;
-    margin-bottom: 12px;
+    margin-top: 7px;
+    margin-bottom: 7px;
+    /* margin-right: 600px; */
+    margin-left: 22px;
+    width: 97%;
+
 }
 
 .login-title {
@@ -129,7 +134,6 @@ button {
     border-radius: 10px; 
     border: 6px solid #000;
     width: 94%;
-    border: 6px solid #000;
 }
 
 .post h2 {
@@ -235,7 +239,7 @@ button {
 }
 
 .form-input, .form-textarea {
-    width: 100%; /* Asegura que el input ocupe todo el ancho disponible */
+    width: 95.5%; /* Asegura que el input ocupe todo el ancho disponible */
     padding: 10px;
     margin-bottom: 10px; /* Espacio entre los campos de entrada */
     border: 1px solid #ccc;
@@ -265,3 +269,85 @@ button {
 p {
     scale:278%;
 }
+
+
+.post-dashboard {
+    color: #000000; 
+    margin: 20px 0;
+    border-radius: 10px; 
+    width: 94%;
+}
+
+
+
+.post-dashboard h2 {
+    background-color: #23100f;
+    margin-top: 0;
+    color: white;
+    font-size: 27px;
+    text-align: center;
+}
+
+.post-dashboard p {
+    font-size: 23px;
+    text-align: center;
+    scale: 100%;
+}
+
+.post-dashboard small{
+    text-align: center;
+    display: grid;
+    margin-top: -15px;
+    font-size: 20px;
+
+}
+
+.post-dashboard a, .btn{
+    background-color: #23100f;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    justify-content: center;
+    display: grid;
+    margin-top: 7px;
+    margin-bottom: 7px;
+    /* margin-right: 600px; */
+    margin-left: 22px;
+    width: 94.5%;
+}
+
+input, textarea{
+    width: calc(97% - 20px);
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    margin: 8px;
+    border-radius: 4px;
+    /* height: 100px; */
+    resize: vertical;
+    width: 96%;
+    margin: 18px;
+    text-align: center;
+
+}
+
+.comments-section h3{
+    background-color: #23100f;
+    margin-top: 0;
+    color: white;
+    font-size: 27px;
+    text-align: center;
+}
+
+.add-comment-section h3{
+    background-color: #23100f;
+    margin-top: 0;
+    color: white;
+    font-size: 27px;
+    text-align: center;
+
+}
+
+

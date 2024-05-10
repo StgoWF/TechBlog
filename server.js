@@ -5,9 +5,6 @@ if (!process.env.NODE_ENV) {
     process.env.NODE_ENV = 'production';
 }
 console.log("Environment:", process.env.NODE_ENV);
-console.log("JAWSDB_URL:", process.env.JAWSDB_URL);
-
-
 
 const path = require('path');
 const express = require('express');
@@ -16,7 +13,6 @@ const session = require('express-session');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
 const Sequelize = require('sequelize');
 const config = require('./config/config'); 
-
 const app = express();
 const PORT = process.env.PORT || 4000;
 

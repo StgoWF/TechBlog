@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 const config = require('../config/config');
 
-// Determinar el entorno y cargar la configuración adecuada
+// Determine the environment and load the appropriate configuration
 const env = process.env.NODE_ENV || 'development';
 const dbConfig = config[env];
 console.log('Current environment:', env);  // Log the current environment
@@ -9,9 +9,9 @@ console.log('Database configuration loaded:', dbConfig);  // Log the loaded data
 
 let sequelize;
 
-// Inicialización de Sequelize basada en el entorno
+// Sequelize initialization based on the environment
 if (dbConfig.use_env_variable) {
-    // Uso de la variable de entorno en producción para la URL de la base de datos
+    // Use environment variable in production for the database URL
     sequelize = new Sequelize(process.env[dbConfig.use_env_variable], {
         dialect: 'mysql',
         dialectOptions: {
@@ -20,10 +20,10 @@ if (dbConfig.use_env_variable) {
                 rejectUnauthorized: false
             }
         },
-        logging: false // Cambiar a true para ver los logs de SQL en el entorno de desarrollo
+        logging: false // Change to true to see SQL logs in the development environment
     });
 } else {
-    // Configuración detallada para el desarrollo
+    // Detailed configuration for development
     sequelize = new Sequelize(
         dbConfig.database, 
         dbConfig.username, 
@@ -39,33 +39,33 @@ if (dbConfig.use_env_variable) {
     );
 }
 
-// Función para registrar el estado de la conexión a la base de datos
+// Function to log the database connection status
 function logDatabaseConnectionStatus() {
     sequelize.authenticate()
         .then(() => console.log('Connection has been established successfully.'))
         .catch(error => console.error('Unable to connect to the database:', error));
 }
 
-// Registrar el estado de la conexión
+// Log the connection status
 logDatabaseConnectionStatus();
 
-// Importar modelos
+// Import models
 const User = require('./User')(sequelize, Sequelize);
 const Post = require('./Post')(sequelize, Sequelize);
 const Comment = require('./Comment')(sequelize, Sequelize);
 
 console.log('Models imported successfully');  // Log successful model importation
 
-// Definir relaciones entre modelos
+// Define relationships between models
 User.hasMany(Post, { foreignKey: 'userId' });
 Post.belongsTo(User, { as: 'author', foreignKey: 'userId' });
 Post.hasMany(Comment, { foreignKey: 'postId' });
-Comment.belongsTo(Post, { foreignKey: 'postId' });
+Comment.belongsTo(Post, { as: 'post',foreignKey: 'postId' });
 Comment.belongsTo(User, { as: 'user', foreignKey: 'userId' });
 
 console.log('Model relationships defined successfully');  // Log successful relationship definition
 
-// Exportar la instancia de Sequelize y todos los modelos
+// Export the Sequelize instance and all models
 module.exports = {
   sequelize,
   User,

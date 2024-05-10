@@ -1,4 +1,4 @@
-<div class="post">
+<div class="post-dashboard">
     <div class="post-content">
         <h2 class="post-title">{{post.title}}</h2>
         <p>{{post.content}}</p>
@@ -10,17 +10,17 @@
         {{#each post.Comments}}
         <div class="comment">
             <p>{{this.content}}</p>
-            <small>Comment by: {{this.user.username}}</small>
-            <form action="/comments/update/{{this.id}}" method="POST">
-                <input type="hidden" name="postId" value="{{../post.id}}">
-                <input type="text" name="content" value="{{this.content}}" required>
-                <button type="submit">Update Comment</button>
-            </form>
-            <!-- Form for deleting a comment -->
-            <form action="/comments/delete/{{this.id}}" method="POST">
-                <input type="hidden" name="postId" value="{{../post.id}}">
-                <button type="submit">Delete Comment</button>
-            </form>
+            <small>Comment by: {{this.user.username}} on {{this.createdAt}}</small>
+            <!-- Button to edit comment -->
+            {{#if this.isOwner}}
+                <a href="/comments/edit/{{this.id}}" class="btn">Edit Comment</a>
+                <!-- Form for deleting a comment -->
+                <form action="/comments/delete/{{this.id}}" method="POST">
+                    <input type="hidden" name="postId" value="{{../post.id}}">
+                    <button type="submit">Delete Comment</button>
+                </form>
+            {{/if}}
+            
         </div>
         {{/each}}
     </div>
@@ -36,3 +36,4 @@
         </form>
     </div>
 </div>
+
