@@ -1,4 +1,4 @@
-/* Estilos básicos para el layout y elementos comunes */
+
 body {
     font-family: 'Roboto';
     background-color: #d9ead3;
@@ -53,11 +53,7 @@ header nav ul li a {
     text-decoration: none;
 }
 
-/* .dashboard, .home, .login-form {
-    margin: 20px;
-    padding: 20px;
-    border: 1px solid #ccc;
-} */
+
 
 button {
     background-color: #23100f;
@@ -70,7 +66,7 @@ button {
     display: grid;
     margin-top: 7px;
     margin-bottom: 7px;
-    /* margin-right: 600px; */
+
     margin-left: 22px;
     width: 97%;
 
@@ -98,7 +94,6 @@ button {
     border: 1px solid #ccc;
     margin: 8px;
     border-radius: 4px;
-    /* height: 100px; */
     resize: vertical;
     width: 96%;
     margin: 18px;
@@ -176,7 +171,6 @@ button {
 
 .comment-textarea {
     width: 80%;
-    /* justify-content: center; */
     display: grid;
     margin-left: 154px;
     margin-top: 15px;
@@ -239,11 +233,11 @@ button {
 }
 
 .form-input, .form-textarea {
-    width: 95.5%; /* Asegura que el input ocupe todo el ancho disponible */
+    width: 95.5%;
     padding: 10px;
-    margin-bottom: 10px; /* Espacio entre los campos de entrada */
+    margin-bottom: 10px; 
     border: 1px solid #ccc;
-    border-radius: 4px; /* Bordes ligeramente redondeados */
+    border-radius: 4px; 
 }
 
 .form-textarea {
@@ -313,7 +307,7 @@ p {
     display: grid;
     margin-top: 7px;
     margin-bottom: 7px;
-    /* margin-right: 600px; */
+
     margin-left: 22px;
     width: 94.5%;
 }
@@ -325,7 +319,6 @@ input, textarea{
     border: 1px solid #ccc;
     margin: 8px;
     border-radius: 4px;
-    /* height: 100px; */
     resize: vertical;
     width: 96%;
     margin: 18px;
@@ -351,3 +344,64 @@ input, textarea{
 }
 
 
+@media only screen and (max-width: 730px) {
+
+    .login-form {
+        width: 95%; 
+        padding: 15px; 
+        margin: 10px auto; 
+    }
+
+    .login-form input[type="text"],
+    .login-form input[type="password"],
+    .form-input, 
+    .form-textarea {
+        font-size: 14px; 
+        padding: 12px; 
+    }
+
+    .login-form button,
+    .comment-submit {
+        width: 100%; 
+        font-size: 16px; 
+    }
+
+
+    .post, 
+    .comment {
+        padding: 10px; 
+        margin: 8px 0; 
+    }
+
+
+
+    .post p,
+    .comment p {
+        font-size: 16px; 
+    }
+
+    header nav ul li {
+        padding: 8px 10px; 
+    }
+
+    header nav ul li a {
+        font-size: 16px; 
+    }
+
+ 
+    h1, h2, h3 {
+        padding: 10px;
+        font-size: 20px; 
+    }
+
+    .btn {
+        padding: 10px 15px; 
+        font-size: 15px; 
+    }
+
+    .dashboard-controls,
+    .comments-section,
+    .add-comment-section {
+        padding: 15px;  
+    }
+}
